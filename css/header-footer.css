@@ -1,0 +1,147 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 4, 2019, 4:48:09 PM
+    Author     : Asus
+*/
+
+body {
+    background: url(../images/thumb444x250-01.jpg) no-repeat center center fixed; 
+    background-size:cover; 
+}
+
+nav ul li a:hover {
+    color: yellow !important;
+}
+
+.btn-primary {
+    background: #333;
+    border: none;
+    transition: 0.9s;
+}
+
+.top {
+    background: #fff;
+}
+
+.btn-info {
+    background: #FF4500; 
+    border: none;
+}
+
+.btn-find {
+    pointer-events: none;
+}
+
+.btn-find:hover {
+    background: #FF4500; 
+}
+
+.btn-logreg:hover {
+    background: #4ee44e;
+    border-color: #4ee44e;
+}
+
+.nb {
+    width: 81%;
+}
+
+.search {
+    width: 350px !important;
+}
+
+nav {
+    background: #FF4500;
+}
+
+.page-footer {
+    background: #459ba7; 
+    font-size: 14px;
+}
+/*Carousel CSS*/
+.MultiCarousel { float: left; overflow: hidden; padding: 15px; width: 100%; position:relative; }
+.MultiCarousel .MultiCarousel-inner { transition: 1s ease all; float: left; }
+.MultiCarousel .MultiCarousel-inner .item { float: left; width: 135px !important; display: inline-block; margin: 3px; position: relative; }
+.MultiCarousel .leftLst, .MultiCarousel .rightLst { outline: none; position:absolute; top:calc(50% - 20px); }
+.MultiCarousel .leftLst { left:0; }
+.MultiCarousel .rightLst { right:0; }
+.MultiCarousel .leftLst.over, .MultiCarousel .rightLst.over { pointer-events: none; background:#ccc; }
+
+.fit-image{
+    width: 135px;
+    height: 202px;
+    object-fit: cover;
+}
+
+.caption {
+    position: absolute;
+    z-index: 999;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    line-height: 1em;
+    padding: 5px;
+}
+
+.caption a {
+    color: #fff;
+    font-size: small;
+}
+
+.caption a:hover {
+    text-decoration: none;
+}
+/*--------------------------------------------------------------------------------------------*/
+
+.border-w {
+    border-width: 3px !important;
+}
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    font-size: 30px;
+    border: none;
+    outline: none;
+    background: rgb(128,128,128,0.5);
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
+
+.aside a{
+    color: #fff;
+}
+
+.aside a:hover {
+    text-decoration: none;
+    text-shadow: 2px 2px #000;
+}
+
+.genre a{
+    color: #000;
+}
+
+.genre a:hover {
+    color: #CCCC00 !important;
+    text-decoration: none;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.path {
+    background: #459ba7;
+    color: #fff;
+}
