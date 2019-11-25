@@ -7,18 +7,20 @@
     $manga = array();
     $view_chap = array();
     $up_chap = array();
+    $text_color = array();
     $sql = "SELECT m.image, m.manga_name, l.manga_id, l.current_chap FROM library l, manga m WHERE l.id = ".$_SESSION["id"]." AND m.manga_id = l.manga_id AND bookmark = true";
     if ($result = $con->query($sql)) {
         while($row = $result->fetch_object()){
             $manga_id[] = $row->manga_id;
             $image[] = $row->image;
             $manga[] = $row->manga_name;
-            if ($row->current_chap != null) { $view_chap[] = $row->current_chap; } 
-            else { $view_chap[] = 1; }
+            $view_chap[] = $row->current_chap;
             $chap_sql = "SELECT chapter_no FROM chapters WHERE manga_id = $row->manga_id ORDER BY chapter_no DESC LIMIT 1";
             $answer = $con->query($chap_sql);
             while($chap_row = $answer->fetch_object()){
                 $up_chap[] = $chap_row->chapter_no;
+                if ($row->current_chap == $chap_row->chapter_no) { $text_color[] = "text-success"; }
+                else { $text_color[] = "text-danger"; }
             }
             $bookmark = 1;
         }
@@ -70,7 +72,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="info">
-                                                    <a class="h5 text-success text-decoration-none" href="info.php?manga_id=%d">%s</a>
+                                                    <a class="h5 %s text-decoration-none" href="info.php?manga_id=%d">%s</a>
                                                     <form name="myform" class="float-right" method="post"><button class="btn btn-default text-danger" name="del_but" value="%d">Remove</button></form><br>
                                                     <span>Viewed: <a class="text-decoration-none text-success" href="viewPages.php?manga_id=%d&chapter=%d">Chapter %d</a></span><br>
                                                     <span>Current: <a class="text-decoration-none text-success" href="viewPages.php?manga_id=%d&chapter=%d">Chapter %d</a></span>
@@ -80,6 +82,7 @@
                                         ', $manga_id[$i],
                                         $image[$i], 
                                         $manga[$i],
+                                        $text_color[$i],
                                         $manga_id[$i],
                                         $manga[$i],
                                         $manga_id[$i],

@@ -19,6 +19,8 @@
             $answer = $con->query($chap_sql);
             while($chap_row = $answer->fetch_object()){
                 $up_chap[] = $chap_row->chapter_no;
+                if ($row->current_chap == $chap_row->chapter_no) { $text_color[] = "text-success"; }
+                else { $text_color[] = "text-danger"; }
             }
             $history = 1;
         }
@@ -70,7 +72,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="info">
-                                                    <a class="h5 text-success text-decoration-none" href="info.php?manga_id=%d">%s</a>
+                                                    <a class="h5 %s text-decoration-none" href="info.php?manga_id=%d">%s</a>
                                                     <form name="myform" class="float-right" method="post"><button class="btn btn-default text-danger" name="del_but" value="%d">Remove</button></form><br>
                                                     <span>Viewed: <a class="text-decoration-none text-success" href="viewPages.php?manga_id=%d&chapter=%d">Chapter %d</a></span><br>
                                                     <span>Current: <a class="text-decoration-none text-success" href="viewPages.php?manga_id=%d&chapter=%d">Chapter %d</a></span>
@@ -80,6 +82,7 @@
                                         ', $manga_id[$i],
                                         $image[$i], 
                                         $manga[$i],
+                                        $text_color[$i],
                                         $manga_id[$i],
                                         $manga[$i],
                                         $manga_id[$i],

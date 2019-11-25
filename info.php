@@ -161,8 +161,12 @@
             }
             
             .chapter a:hover {
-                color: #FF4500;
+                color: orange;
                 text-decoration: none;
+            }
+            
+            .chapter a:visited {
+                color: orange;
             }
             
             .bookmark {

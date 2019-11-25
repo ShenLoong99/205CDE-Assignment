@@ -55,8 +55,14 @@
             $exist = true;
         }
         if ($exist == true) {
-            if ($history == true) {
-                $sql = "UPDATE library SET current_chap = $chapter, history = true WHERE manga_id = $manga_id AND id = '".$_SESSION["id"]."' AND $chapter > current_chap";
+            if ($history == true) { // update current chapter
+                $sql = "UPDATE library SET current_chap = $chapter WHERE manga_id = $manga_id AND id = '".$_SESSION["id"]."' AND $chapter > current_chap";
+                $con->query($sql);
+            }
+            else { // update current chapter
+                $sql = "UPDATE library SET current_chap = $chapter WHERE manga_id = $manga_id AND id = '".$_SESSION["id"]."' AND $chapter > current_chap";
+                $con->query($sql); // update history counter
+                $sql = "UPDATE library SET history = true WHERE manga_id = $manga_id AND id = '".$_SESSION["id"]."'";
                 $con->query($sql);
             }
         }
