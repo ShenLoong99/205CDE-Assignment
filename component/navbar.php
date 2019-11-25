@@ -8,12 +8,12 @@
         </div>
         <div class="nb">
             <div class="row mb-1">
-                <form class="form-inline">
+                <form class="form-inline" name='search' action='search.php'>
                     <button class="btn btn-info btn-md my-2 my-sm-0 ml-3 btn-find">
                         <i class="fa fa-search"></i>
                     </button>
                     <div class="md-form my-0">
-                        <input class="form-control mr-sm-2 shadow-none search" type="text" required placeholder="Search Manga..." aria-label="Search">
+                        <input autocomplete="off" value="<?php if(isset($_GET['search'])) { echo $_GET['search']; } ?>" class="form-control mr-sm-2 shadow-none search" name="search" type="text" required placeholder="Search Manga..." aria-label="Search">
                     </div>
                 </form>
                 <a href="login.php" class="btn btn-dark mr-3 shadow-none btn-logreg">
@@ -27,9 +27,9 @@
                 <ul class="navbar-nav">
                     <li class="nav-item active"><a class="nav-link text-white" href="home.php">HOME</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="general.php?type=Latest&category=All&status=All">LATEST MANGA</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="general.php?type=Hot%20Manga&category=All&status=All">HOT MANGA</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="general.php?type=Top%20read&category=All&status=All">HOT MANGA</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="general.php?type=Newest&category=All&status=All">NEW MANGA</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="general.php?type=Latest&category=All&status=Completed">COMPLETED MANGA</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="general.php?type=All&category=All&status=Completed">COMPLETED MANGA</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="home.php">MANGAKAKALOT</a></li>
                 </ul>
             </nav>

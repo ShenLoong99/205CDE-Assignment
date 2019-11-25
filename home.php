@@ -1,4 +1,7 @@
-<?php session_start() ?>
+<?php 
+    session_start();
+    require_once 'component/db.php';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,6 +35,8 @@
         </style>
     </head>
     <body>
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0"></script>
         <?php 
             if (isset($_SESSION["logged-in"]) == false) {
                 include('component/navbar.php');
@@ -50,70 +55,77 @@
                                 <i class="fas fa-arrow-alt-circle-right"></i> LATEST UPDATES
                             </h6>
                         </div>
-                        <?php 
-                            require_once 'component/db.php';
-                            $sql = 'SELECT manga_id, manga_name, image FROM manga ORDER BY manga_name';
+                        <?php // declare array 
+                            $manga_id = array();
+                            $manga_name = array();
+                            $image = array();
+                            $manga_short = array(); // get home page content
+                            $sql = 'SELECT manga_id, manga_name, image FROM manga ORDER BY RAND()';
                             if($result = $con->query($sql)){
-                                $manga_id = array();
-                                $manga_name = array();
-                                $image = array();
-                                $manga_short = array();
                                 while($row = $result->fetch_object()){
                                     $manga_id[] = $row->manga_id;
                                     $manga_name[] = $row->manga_name;
                                     $manga = $row->manga_name;
                                     $image[] = $row->image;
-                                    if (strlen($manga) > 23) {
-                                        $manga = substr($manga, 0, 23).'...';
-                                        $manga_short[] = $manga;
-                                    }
-                                    else {
-                                        $manga_short[] = $manga;
-                                    }
-                                }
-                                $a = 0;
-                                for ($i = 0; $i < 28; $i++) {
-                                    echo '<div class="card flex-md-row py-3">';
-                                    for ($n = 0; $n < 2; $n++) {
-                                        printf('
-                                            <div class="col-6">
-                                                <div class="container-fluid col-sm-4 float-left">
-                                                    <a href="info.html?manga=%d">
-                                                        <img class="card-img-left img-fluid img-responsive img-thumbnail" style="height: 100px;" src="images/manga covers/%s" alt="%s">
-                                                    </a>
-                                                </div>
-                                                <div class="info">
-                                                    <span><a class="text-dark" href="info.html?manga=%d" title="%s"><b>%s</b></a></span><br>
-                                                    <i class="fas fa-angle-double-right"></i>
-                                                    <a class="text-dark" href="https://mangakakalot.com/chapter/xk919132/chapter_56" title="Chapter 56: Immortal Doing Evil">CHAPTER 56</a>
-                                                    <span class="float-right"><small>47 mins ago</small></span><br>
-                                                    <i class="fas fa-angle-double-right"></i>
-                                                    <a class="text-dark" href="https://mangakakalot.com/chapter/xk919132/chapter_56" title="Chapter 56: Immortal Doing Evil">CHAPTER 56</a>
-                                                    <span class="float-right"><small>47 mins ago</small></span><br>
-                                                    <i class="fas fa-angle-double-right"></i>
-                                                    <a class="text-dark" href="https://mangakakalot.com/chapter/xk919132/chapter_56" title="Chapter 56: Immortal Doing Evil">CHAPTER 56</a>
-                                                    <span class="float-right"><small>47 mins ago</small></span>
-                                                </div>
-                                            </div>
-                                            ',
-                                            $manga_id[$a],
-                                            $image[$a],
-                                            $manga_name[$a],
-                                            $manga_id[$a],
-                                            $manga_name[$a],
-                                            $manga_short[$a]
-                                        );
-                                        $a++;
-                                    }
-                                    echo '</div>';
+                                    if (strlen($manga) > 23) { $manga_short[] = substr($manga, 0, 23).'...'; }
+                                    else { $manga_short[] = $manga; }
                                 }
                             }
                             else {
                                 echo "<script>alert('SQL error! Cannot retrieve data from database!');</script>";
                             }
-                            $con->close();
+                            // printing results
+                            $a = 0;
+                            for ($i = 0; $i < 28; $i++) {
+                                echo '<div class="card flex-md-row py-3">';
+                                for ($n = 0; $n < 2; $n++) { // printing output
+                                    printf('
+                                        <div class="col-6">
+                                            <div class="container-fluid col-sm-4 float-left">
+                                                <a href="info.php?manga_id=%d">
+                                                    <img class="card-img-left img-fluid img-responsive img-thumbnail" style="height: 100px;" src="images/manga covers/%s" alt="%s">
+                                                </a>
+                                            </div>
+                                            <div class="info">
+                                                <span><a class="text-dark" href="info.php?manga_id=%d" title="%s"><b>%s</b></a></span><br>
+                                        ',
+                                        $manga_id[$a],
+                                        $image[$a],
+                                        $manga_name[$a],
+                                        $manga_id[$a],
+                                        $manga_name[$a],
+                                        $manga_short[$a]
+                                    );
+                                    $sql = "SELECT volume, chapter_no, chapter_name, time_upload FROM chapters WHERE manga_id = '$manga_id[$a]' ORDER BY chapter_no DESC";
+                                    if($result = $con->query($sql)){
+                                        $b = 0;
+                                        while ($row = $result->fetch_object()) {
+                                            printf('
+                                                <i class="fas fa-angle-double-right"></i>
+                                                <a class="text-dark" href="viewPages.php?manga_id=%d&chapter=%d" title="Chapter %d %s">%s CHAPTER %d</a>
+                                                <span class="float-right"><small>%s</small></span><br>
+                                                ',
+                                                $manga_id[$a],
+                                                $row->chapter_no,
+                                                $row->chapter_no,
+                                                $row->chapter_name,
+                                                $row->volume,
+                                                $row->chapter_no,
+                                                substr($row->time_upload, 5, 5));
+                                            $b++;
+                                            if ($b == 3) {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $a++;
+                                    echo '</div>';
+                                    echo '</div>';
+                                }
+                                echo '</div>';
+                            }
                         ?>
-                        <a class="text-white text-decoration-none" href="general.php?type=Latest&category=All&status=All">
+                        <a class="text-white text-decoration-none" href="general.php?type=All&category=All&status=All">
                             <div class="bg-primary p-3 d-block text-center more">
                                 More <i class="fas fa-arrow-alt-circle-right fa-lg"></i>
                             </div>

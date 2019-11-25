@@ -26,7 +26,7 @@
             $_SESSION["username"] = $username;
             $_SESSION["phone"] = $phone;
             $_SESSION["desc"] = $desc;
-            header("Refresh: 0.5; url = user.php");
+            header("Refresh: 0.1; url = user.php");
         } else {
             //update failed
             echo "<script>alert('SQL error! Cannot update!')</script>";

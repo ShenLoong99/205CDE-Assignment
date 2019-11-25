@@ -1,9 +1,16 @@
 <?php
     if(isset($_POST['submit'])){
+        $username = trim($_POST['uname']);
+        $password = trim($_POST['password']);
+        if(!empty($_POST["remember"])) {
+            setcookie ("username", $username, time()+ (10 * 365 * 24 * 60 * 60));
+            setcookie ("password", $password, time()+ (10 * 365 * 24 * 60 * 60));
+        } else {
+            setcookie ("username", "");
+            setcookie ("password", "");
+        }
         require 'component/recaptcha.php';
         if (reCaptcha()) {
-            $username = trim($_POST['uname']);
-            $password = trim($_POST['password']);
             require 'component/db.php';
             $sql = "SELECT * FROM user WHERE username = '".$username."'";
             if($result = $con -> query($sql)){
@@ -20,6 +27,7 @@
                             $_SESSION["desc"] = $row["desc"]; 
                             header("location: user.php");
                         } else {
+                            echo "<script>alert('The password you entered is incorrect!')</script>";
                             break;
                         }
                     }
@@ -65,15 +73,16 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                             </div>
-                            <input name="uname" class="form-control" maxlength="30" required placeholder="Username" type="text">
+                            <input name="uname" class="form-control" maxlength="30" value="<?php if(isset($username)) { echo $username; } else if (isset($_COOKIE["username"])) { echo $_COOKIE["username"]; } ?>" required placeholder="Username" type="text">
                         </div> <!-- form-group// -->
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                             </div>
-                            <input name="password" class="form-control" required placeholder="Password" maxlength="50" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password">
+                            <input name="password" class="form-control" required placeholder="Password" maxlength="50" value="<?php if (isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password">
                         </div> <!-- form-group// -->
                         <div class="g-recaptcha" data-sitekey="6Lfbg78UAAAAAJziJaCoegxeSgojteRb6ZmpckCx"></div><br>
+                        <label class="float-left"><input type="checkbox" <?php if(isset($_COOKIE["username"])) { echo 'checked'; } ?> name="remember">  Remember me</label>
                         <button type="submit" name="submit" class="btn btn-dark btn-lg text-uppercase active w-100"><b>sign in</b></button>
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">

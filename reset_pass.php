@@ -1,9 +1,25 @@
+<?php 
+    $idForDecrypt = $_GET['id'];
+    $password = "password";
+    $id = openssl_decrypt($idForDecrypt,"AES-128-ECB",$password);
+    
+    if(isset($_POST['submit'])){
+        $password = $_POST['password1'];
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        require_once 'component/db.php';
+        $sql = "UPDATE user SET password = '".$hash."' WHERE id = $id";
+        if ($con->query($sql)) {
+            echo "<script>alert('Password has change successfully!')</script>";
+            header("Refresh:0.1, url = login.php");
+        }
+        else {
+            printf("<script>alert('Error SQL %s. Cannot Update!')</script>", mysqli_error($con));
+        }
+        $con->close();
+    }
+?>
+
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Password Reset</title>
@@ -16,12 +32,11 @@ and open the template in the editor.
         </style>
         <script>
             function validateform(){ 
-                var email=document.myform.email.value;
-                var atposition=email.indexOf("@");  
-                var dotposition=email.lastIndexOf(".");
+                var password1=document.myform.password1.value;
+                var password2=document.myform.password2.value;
                 
-                if (atposition<1 || dotposition<atposition+2 || dotposition+2>=x.length){  
-                    alert("Please enter a valid e-mail address");  
+                if(password1 != password2){ 
+                    alert("Password must be same!");  
                     return false;  
                 }
             }
@@ -37,7 +52,7 @@ and open the template in the editor.
             <div class="d-block bg-light text-center">
                 <div class="p-3 bg-light w-75 d-inline-block">
                     <h2><b>Password Reset</b></h2>
-                    <form method="post" name="myform" onsubmit="return validateform()" action="notify.php">
+                    <form method="post" name="myform" onsubmit="return validateform()">
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
@@ -50,7 +65,7 @@ and open the template in the editor.
                             </div>
                             <input name="password2" class="form-control" required placeholder="Repeat password" maxlength="50" type="password">
                         </div> <!-- form-group// -->
-                        <button type="submit" class="btn btn-dark btn-lg text-uppercase active w-100 mb-4"><b>SUBMIT</b></button>
+                        <button type="submit" name="submit" class="btn btn-dark btn-lg text-uppercase active w-100 mb-4"><b>SUBMIT</b></button>
                     </form>
                 </div>
             </div>
