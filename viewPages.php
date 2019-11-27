@@ -328,8 +328,8 @@
                             }
                         ?>
                     </span><br>
-                    <div class="fb-comments p-2" data-href="http://localhost:8383/Mangakakalot/viewPages.php?manga_id=<?php echo $manga_id ?>&chapter=<?php echo $chapter ?>" data-width="500" data-numposts="10" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
                 </div>
+                <div class="fb-comments bg-light p-2" data-href="http://localhost:8383/Mangakakalot/viewPages.php?manga_id=<?php echo $manga_id ?>&chapter=<?php echo $chapter ?>" data-width="100%" data-numposts="10"></div>
                 <div>
                     <div class="bg-light p-2"><span class="recent h5 text-uppercase"><b>RECENTLY UPDATED MANGA</b></span></div>
                     <?php
