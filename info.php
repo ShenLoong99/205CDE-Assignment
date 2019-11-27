@@ -149,7 +149,7 @@
             
             .my-custom-scrollbar {
                 position: relative;
-                height: 300px;
+                height: 500px;
                 overflow: auto;
             }
             .table-wrapper-scroll-y {
@@ -180,6 +180,14 @@
             
             .fa-star:hover {
                 color: green;
+            }
+            
+            .visiblediv {
+                display: block;
+            }
+
+            .hiddendiv {
+                display: none;
             }
         </style>
     </head>
@@ -242,15 +250,19 @@
                             }
                             printf('<br><small>Mangakakalot.com rate : %.2f/ 5 - %d votes</small><br>', $rating, $votes);
                             if ($bookmark == false) {echo '<button class="btn btn-default" name="bookmark"><img class="img-responsive bookmark" src="images/theodoi.png" alt="bookmark"></button>';}
-                            else { echo '<small>You already bookmarked this manga!</small>'; };
-                            printf('</form><div class="fb-save" data-uri="http://localhost:8383/Mangakakalot/info.php?manga_id=%d" data-size="small"></div>
+                            else { echo '<small>You already bookmarked this manga!</small></form>'; };
+                            printf('<div class="fb-save" data-uri="http://localhost:8383/Mangakakalot/info.php?manga_id=%d" data-size="small"></div>
                                   <div class="fb-like" data-href="http://localhost:8383/Mangakakalot/info.php?manga_id=%d" data-width="1" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
                                   </div>
                                   </div>
                                   <hr>', $manga_id, $manga_id);
                             printf('<div class="px-3">
                                         <p class="text-danger">%s summary: </p>
-                                        <p class="text-justify">%s</p>
+                                        <button id="p1" class="btn mx-auto d-block" style="color: orange">Show More &#8595;&#8595;</button>
+                                        <div id="scritta" class="hiddendiv">
+                                            <p class="text-justify">%s</p>
+                                            <button id="p2" class="btn mx-auto d-block" style="color: orange">Show Less &#8593;&#8593;</button>
+                                        </div>
                                     </div><br>
                                     ', 
                                 $manga_name,
@@ -259,9 +271,9 @@
                                     <table class="table table-sm chapter">
                                         <thead>
                                             <tr>
-                                                <th scope="col"><a name="chapter-list">Chapter Name</a></th>
-                                                <th scope="col">View</th>
-                                                <th scope="col">Time uploaded</th>
+                                                <th scope="col" style="color: #ff5349;"><a name="chapter-list">Chapter Name</a></th>
+                                                <th scope="col" style="color: #ff5349;">View</th>
+                                                <th scope="col" style="color: #ff5349;">Time uploaded</th>
                                             </tr>
                                         </thead>
                                         <tbody>';
@@ -292,4 +304,22 @@
         </section><br>
         <?php include('component/footer.php') ?>
     </body>
+    <script>
+        function show() {
+           document.getElementById('scritta').className='visiblediv'; 
+           document.getElementById('p1').className='hiddendiv btn mx-auto'; 
+           return false;
+        }
+
+        function hide() {
+           document.getElementById('scritta').className='hiddendiv'; 
+           document.getElementById('p1').className='visiblediv btn mx-auto'; 
+           return false;
+        }
+
+        var p1 = document.getElementById("p1");
+        p1.onclick = show;
+        var p2 = document.getElementById("p2");
+        p2.onclick = hide;
+    </script>
 </html>
