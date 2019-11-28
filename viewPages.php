@@ -255,7 +255,7 @@
             </div>
             <div class="text-center mb-2">
                 <?php
-                    for ($i = 0; $i < sizeof($page_no); $i++) {
+                    for ($i = 1; $i <= sizeof($page_no); $i++) {
                         printf('<img class="mb-2" src="images/manga pages/%s/%s/%d.jpg" alt="page %d">', $manga_name, $chapter, $i, $i);
                     }
                 ?>
