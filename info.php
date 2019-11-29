@@ -165,10 +165,6 @@
                 text-decoration: none;
             }
             
-            .chapter a:visited {
-                color: orange;
-            }
-            
             .bookmark {
                 width: 60%;
                 height: 60%;
