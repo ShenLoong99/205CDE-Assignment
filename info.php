@@ -106,8 +106,8 @@
             }
         }
         else {
-            echo "<script>alert('Please login to bookmark this manga...')</script>";
-            header('Location: '.$_SERVER['REQUEST_URI']);
+            echo "<script>alert('Please login to rate this manga...')</script>";
+            header("Refresh: 0.1; url=info.php?manga_id=$manga_id");
         }
     }
 ?>

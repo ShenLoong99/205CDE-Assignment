@@ -1,3 +1,18 @@
+<?php 
+    session_start();
+    require_once 'component/db.php';
+    $sql = "SELECT `name`, `email`, `username`, `phone`, `desc` FROM `user` WHERE `id` = ".$_SESSION["id"]."";
+    $result = $con->query($sql);
+    while($row = $result->fetch_object()){
+        $_SESSION["name"] = $row->name;
+        $_SESSION["email"] = $row->email;
+        $_SESSION["username"] = $row->username;
+        $_SESSION["phone"] = $row->phone;
+        $_SESSION["desc"] = $row->desc;
+    }
+    $con->close(); // disconnect 
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
