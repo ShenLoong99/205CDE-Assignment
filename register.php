@@ -90,7 +90,6 @@
         }
         //$result -> free(); only for search
         $result -> free();
-        $con -> close();
         return $exist;
     }
 ?>

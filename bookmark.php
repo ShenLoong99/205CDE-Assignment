@@ -26,13 +26,12 @@
         }
     }
     
-    // clean database
-    $sql = "DELETE FROM library WHERE bookmark = false AND rate = false AND history = false";
-    $con->query($sql);
-    
     if(isset($_POST['del_but'])){
         $del_id = $_POST["del_but"];
         $sql = "UPDATE library SET bookmark = false WHERE manga_id = $del_id AND id = ".$_SESSION["id"]."";
+        $con->query($sql);
+        // clean database
+        $sql = "DELETE FROM library WHERE bookmark = false AND rate = false AND history = false";
         $con->query($sql);
         header('Location: '.$_SERVER['REQUEST_URI']);
     }

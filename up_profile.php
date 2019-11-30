@@ -15,84 +15,98 @@
         $phone_body = $_POST['phone'];
         $phone = $phone_head . $phone_body;
         $desc = $_POST['desc'];
-        //Step 1: establish connect
-        require 'component/db.php';
-        //Step 2: sql statement
-        $sql = "UPDATE `user` SET `name` = '".$name."', `username` = '".$username."', `phone` = '".$phone."', `desc` = '".$desc."', `email` = '".$email."' WHERE `id` = '".$_SESSION["id"]."'";
-        //Step 3: run sql
-        $result = $con->query($sql);
-        if (!$result) {
-            printf("Error: %s\n", mysqli_error($con));
+        require 'component/db.php'; //Step 1: establish connect
+        if (chkUname($username, $con) == true) {
+            echo "<script>alert('Existed username detected! Please use another username...')</script>";
+            header("Refresh: 0.1; url = up_profile.php");
         }
-        if ($con->query($sql)) { //update successful
-            if (strcmp($email, $_SESSION["email"]) != 0) { // if email not same, send email
-                $key = "random";
-                $encrypted_email = openssl_encrypt($_SESSION["email"], "AES-128-ECB", $key);
-                $encrypted_id = openssl_encrypt($_SESSION["id"], "AES-128-ECB", $key);
-                require "../vendor/autoload.php";
-                $mail = new PHPMailer(true);
-                // $mail->SMTPDebug = 2; //not nessasary .. use to find our bug
-                $mail->IsSMTP();
-                $mail->CharSet = "utf-8";
-                $mail->SMTPSecure = "tls"; //Enable TLS encryption
-                $mail->SMTPAuth = true;
-                $mail->Host = "smtp.gmail.com";
-                $mail->Port = 587;
-                $mail->SMTPOptions = array(
-                    'ssl' => array(
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                        'allow_self_signed' => true
-                    )
-                );
-                $mail->isHTML(true);
-                $sender_email = "yithuet.tsk@gmail.com"; //Your gmail
-                $mail->Username = $sender_email;
-                $mail->Password = "llsvrjbrtkvpyhyf"; //Your App Password 		
-                $mail->setFrom($sender_email, 'Mangakakalot');//Your application NAME and EMAIL
-                $mail->Subject = "Mangakakalot Email Changes";
-                $mail->MsgHTML("<div><p>Mangakakalot</p></div>"
-                        . "<div><p>Dear $name,</p> "
-                        . "<p></p> "
-                        . "<p>We have receive a request to change email from Mangakakalot.com account by the username of $username.</p> "
-                        . "<p>Please be informed that your account has changed the email address, hence we will send news and updates to this email in the future.</p> "
-                        . "<p>* If you <strong>DON'T KNOW</strong> any activity about this, please click this link below </p>"
-                        . "<a href='http://localhost/Mangakakalot/remain_email.php?email=$encrypted_email&id=$encrypted_id'>Reset Email</a><br><br>"
-                        . "Enjoy!<br>Sincerely yours,<br>"
-                        . "mangakakalot </div> <br>");
-                $mail->addAddress($email, $username);// Target email
-                if($mail->Send()){ // if email send successfully
-                    echo '<script>alert("Changes has been made successfully! An email will be sent to the email address provided.")</script>';
+        else {
+            //Step 2: sql statement
+            $sql = "UPDATE `user` SET `name` = '".$name."', `username` = '".$username."', `phone` = '".$phone."', `desc` = '".$desc."', `email` = '".$email."' WHERE `id` = '".$_SESSION["id"]."'";
+            //Step 3: run sql
+            if ($con->query($sql)) { //update successful
+                if (strcmp($email, $_SESSION["email"]) != 0) { // if email not same, send email
+                    $key = "random";
+                    $encrypted_email = openssl_encrypt($_SESSION["email"], "AES-128-ECB", $key);
+                    $encrypted_id = openssl_encrypt($_SESSION["id"], "AES-128-ECB", $key);
+                    require "../vendor/autoload.php";
+                    $mail = new PHPMailer(true);
+                    // $mail->SMTPDebug = 2; //not nessasary .. use to find our bug
+                    $mail->IsSMTP();
+                    $mail->CharSet = "utf-8";
+                    $mail->SMTPSecure = "tls"; //Enable TLS encryption
+                    $mail->SMTPAuth = true;
+                    $mail->Host = "smtp.gmail.com";
+                    $mail->Port = 587;
+                    $mail->SMTPOptions = array(
+                        'ssl' => array(
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true
+                        )
+                    );
+                    $mail->isHTML(true);
+                    $sender_email = "yithuet.tsk@gmail.com"; //Your gmail
+                    $mail->Username = $sender_email;
+                    $mail->Password = "llsvrjbrtkvpyhyf"; //Your App Password 		
+                    $mail->setFrom($sender_email, 'Mangakakalot');//Your application NAME and EMAIL
+                    $mail->Subject = "Mangakakalot Email Changes";
+                    $mail->MsgHTML("<div><p>Mangakakalot</p></div>"
+                            . "<div><p>Dear Sir/Madam,</p> "
+                            . "<p></p> "
+                            . "<p>We have receive a request to change email from Mangakakalot.com account by the username of $username.</p> "
+                            . "<p>Please be informed that your account has changed the email address, hence we will send news and updates to this email in the future.</p> "
+                            . "<p>* If you <strong>DON'T KNOW</strong> any activity about this, please click this link below </p>"
+                            . "<a href='http://localhost/Mangakakalot/remain_email.php?email=$encrypted_email&id=$encrypted_id'>Reset Email</a><br><br>"
+                            . "Enjoy!<br>Sincerely yours,<br>"
+                            . "mangakakalot </div> <br>");
+                    $mail->addAddress($email, $username);// Target email
+                    if($mail->Send()){ // if email send successfully
+                        echo '<script>alert("Changes has been made successfully! An email will be sent to the email address provided.")</script>';
+                        $_SESSION["name"] = $name;
+                        $_SESSION["username"] = $username;
+                        $_SESSION["email"] = $email; 
+                        $_SESSION["phone"] = $phone;
+                        $_SESSION["desc"] = $desc;
+                        header("Refresh: 0.1; url = user.php");
+                    }
+                    else { // if email cannot be sent
+                        echo '<script>alert("Changes has been made successfully! Unfortunately, due to unknown errors, email cannot be sent...")</script>';
+                        $_SESSION["name"] = $name;
+                        $_SESSION["username"] = $username;
+                        $_SESSION["email"] = $email; 
+                        $_SESSION["phone"] = $phone;
+                        $_SESSION["desc"] = $desc;
+                        header("Refresh: 0.1; url = user.php");
+                    }
+                }
+                else { // email same
                     $_SESSION["name"] = $name;
                     $_SESSION["username"] = $username;
-                    $_SESSION["email"] = $email; 
                     $_SESSION["phone"] = $phone;
                     $_SESSION["desc"] = $desc;
+                    echo '<script>alert("Changes has been made successfully!")</script>';
                     header("Refresh: 0.1; url = user.php");
                 }
-                else { // if email cannot be sent
-                    echo '<script>alert("Changes has been made successfully! Unfortunately, due to unknown errors, email cannot be sent...")</script>';
-                    $_SESSION["name"] = $name;
-                    $_SESSION["username"] = $username;
-                    $_SESSION["email"] = $email; 
-                    $_SESSION["phone"] = $phone;
-                    $_SESSION["desc"] = $desc;
-                    header("Refresh: 0.1; url = user.php");
-                }
+            } else { //update failed
+                echo "<script>alert('SQL error! Cannot update!')</script>";
             }
-            else { // email same
-                $_SESSION["name"] = $name;
-                $_SESSION["username"] = $username;
-                $_SESSION["phone"] = $phone;
-                $_SESSION["desc"] = $desc;
-                echo '<script>alert("Changes has been made successfully!")</script>';
-                header("Refresh: 0.1; url = user.php");
-            }
-        } else { //update failed
-            echo "<script>alert('SQL error! Cannot update!')</script>";
         }
         $con->close(); // disconnect 
     }   
+    
+    function chkUname($username, $con){
+        $exist = false;
+        $sql = "SELECT * FROM user WHERE username = '$username'";
+        $result = $con -> query($sql);
+        while($row = $result->fetch_object()){
+            if ($_SESSION["id"] != $row->id) {
+                $exist = true;
+            }
+        }
+        $result -> free(); //$result -> free(); only for search
+        return $exist;
+    }
 ?>
 
 <!DOCTYPE html>

@@ -78,6 +78,13 @@
                 <?php include('component/aside-login.php') ?>
             </div>
         </div><br>
-        <?php include('component/footer.php') ?>
+        <footer class="page-footer sticky-footer-wrapper">
+            <div class="container-fluid py-3 px-5 text-white">
+                <p>
+                    © 2019 Mangakakalot.com, all rights reserved. Top speed, completely free. <br>
+                    Current Time is <?php date_default_timezone_set("Asia/Kuala_Lumpur"); echo date("M-d-Y h:i:s a"); ?>
+                </p>
+            </div>
+        </footer>
     </body>
 </html>

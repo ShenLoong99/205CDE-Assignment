@@ -238,7 +238,7 @@
         </header>
         <section class="container">
             <div class="container info-card text-center px-5 py-2 mt-2 mb-2">
-                <span class="h3 title"><?php echo $manga_name ?>: Chapter <?php echo $chapter ?>: <?php echo $current_chap ?></span><br>
+                <span class="h3 title"><?php echo $manga_name ?>: Chapter <?php echo $chapter ?> <?php echo $current_chap ?></span><br>
                 <span class="info_text">
                     <small>You're reading <b>Heaven Defying Sword Chapter 67: Complete Defeat</b> at 
                         Mangakakalot.com.<br> Please use the Bookmark button to get notifications about the latest 
@@ -256,7 +256,7 @@
             <div class="text-center mb-2">
                 <?php
                     for ($i = 1; $i <= sizeof($page_no); $i++) {
-                        printf('<img class="mb-2" src="images/manga pages/%s/%s/%d.jpg" alt="page %d">', $manga_name, $chapter, $i, $i);
+                        printf('<img class="mb-2" style="max-height: 100%%; max-width: 100%%;" src="images/manga pages/%s/%s/%d.jpg" alt="page %d">', $manga_name, $chapter, $i, $i);
                     }
                 ?>
                 <br>
