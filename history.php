@@ -25,6 +25,35 @@
             $history = 1;
         }
     }
+    // sort red first in the list, then follow by green
+    for ($i = 0; $i < sizeof($manga_id); $i++) {
+        if ($view_chap[$i] != $up_chap[$i]) { // if text-danger (manga found not finished yet)
+            $temp_id = $manga_id[$i]; // save values to variable temp first
+            $temp_image = $image[$i];
+            $temp_name = $manga[$i];
+            $temp_up_chap = $up_chap[$i];
+            $temp_view_chap = $view_chap[$i];
+            $temp_color = $text_color[$i];
+            for ($a = 0; $a < sizeof($manga_id); $a++) {
+                if ($view_chap[$a] == $up_chap[$a]) { // if text-success (manga found read finished)
+                    $manga_id[$i] = $manga_id[$a]; // save values to previous $i array variables
+                    $image[$i] = $image[$a];
+                    $manga[$i] = $manga[$a];
+                    $up_chap[$i] = $up_chap[$a];
+                    $view_chap[$i] = $view_chap[$a];
+                    $text_color[$i] = $text_color[$a];
+                    // save temp values to $a array variables
+                    $manga_id[$a] = $temp_id;
+                    $image[$a] = $temp_image;
+                    $manga[$a] = $temp_name;
+                    $up_chap[$a] = $temp_up_chap;
+                    $view_chap[$a] = $temp_view_chap;
+                    $text_color[$a] = $temp_color;
+                    break;
+                }
+            }
+        }
+    }
     
     if(isset($_POST['del_but'])){ // when click remove button
         $del_id = $_POST["del_but"];
